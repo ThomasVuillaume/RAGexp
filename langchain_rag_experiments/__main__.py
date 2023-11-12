@@ -1,26 +1,31 @@
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from langchain.llms import GPT4All
+#!/usr/bin/env python
+from fastapi import FastAPI
+from langserve import add_routes
+
+from langchain.chat_models import ChatOllama
+from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
-local_path = (
-    "./models/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
+chat_model = ChatOllama(
+    base_url="http://localhost:11434",
+    model="mistral",
+    callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
 )
 
-# Callbacks support token-wise streaming
-callbacks = [StreamingStdOutCallbackHandler()]
+# 2. App definition
+app = FastAPI(
+  title="LangChain Server",
+  version="1.0",
+  description="A simple api server using Langchain's Runnable interfaces",
+)
 
-# Check https://docs.gpt4all.io/gpt4all_python.html
-llm = GPT4All(model=local_path, callbacks=callbacks, verbose=True)
+# 3. Adding chain route
+add_routes(
+    app,
+    chat_model,
+    path="/mistral",
+)
 
-template = """Question: {question}
-
-Answer: Let's think step by step."""
-
-prompt = PromptTemplate(template=template, input_variables=["question"])
-
-llm_chain = LLMChain(prompt=prompt, llm=llm)
-
-question = "What NFL team won the Super Bowl in the year Justin Bieber was born?"
-
-llm_chain.run(question)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="localhost", port=8000)
