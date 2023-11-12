@@ -14,9 +14,9 @@ chat_model = ChatOllama(
 
 # 2. App definition
 app = FastAPI(
-  title="LangChain Server",
-  version="1.0",
-  description="A simple api server using Langchain's Runnable interfaces",
+    title="LangChain Server",
+    version="1.0",
+    description="A simple api server using Langchain's Runnable interfaces",
 )
 
 # 3. Adding chain route
@@ -28,4 +28,5 @@ add_routes(
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="localhost", port=8000)

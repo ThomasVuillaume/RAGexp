@@ -11,6 +11,8 @@ langchain = "^0.0.334"
 langchain-cli = "^0.0.16"
 gpt4all = "^2.0.2"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.5"
 
 [build-system]
 requires = ["poetry-core"]
