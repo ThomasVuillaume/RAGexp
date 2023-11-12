@@ -1,1 +1,1 @@
-To run : `poetry run python -m langchain_rag_experiments` 
+To run : `poetry run python -m RAGexp` 

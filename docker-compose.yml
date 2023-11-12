@@ -1,0 +1,7 @@
+services:
+  RAGexp-app:
+    image: ragexp:latest
+    build: ./
+    command: python -m RAGexp
+    ports:
+      - 8000:8000
